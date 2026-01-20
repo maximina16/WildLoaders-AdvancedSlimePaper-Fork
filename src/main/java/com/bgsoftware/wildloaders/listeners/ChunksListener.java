@@ -31,6 +31,23 @@ public final class ChunksListener implements Listener {
         plugin.getLoaders().loadUnloadedChunkLoaders(e.getWorld());
     }
 
+    /**
+     * Eğer bu dünyada en az 1 aktif chunk-loader varsa, world unload edilmesini engelle.
+     * Böylece world unload olduğu için loader'ın çalışmama problemi çözülür.
+     */
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
+    public void onWorldUnloadPrevent(WorldUnloadEvent e) {
+        try {
+            if (plugin.getLoaders().hasLoadersInWorld(e.getWorld())) {
+                e.setCancelled(true);
+            }
+        } catch (Throwable ignored) {
+        }
+    }
+
+    /**
+     * Unload gerçekten gerçekleşiyorsa (cancel edilmediyse) loader'ları unloaded listesine taşı.
+     */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWorldUnload(WorldUnloadEvent e) {
         plugin.getLoaders().unloadWorld(e.getWorld());

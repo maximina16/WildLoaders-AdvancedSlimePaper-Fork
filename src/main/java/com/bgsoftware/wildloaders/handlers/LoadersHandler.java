@@ -33,6 +33,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 public final class LoadersHandler implements LoadersManager {
+    public boolean hasLoadersInWorld(World world) {
+        List<ChunkLoader> list = this.chunkLoadersByWorlds.get(world.getName());
+        return list != null && !list.isEmpty();
+    }
 
     private final Map<BlockPosition, ChunkLoader> chunkLoaders = Maps.newConcurrentMap();
     private final Map<ChunkPosition, ChunkLoader> chunkLoadersByChunks = Maps.newConcurrentMap();
